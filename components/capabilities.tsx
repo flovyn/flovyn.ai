@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card"
 import { Code2, Workflow, Cpu, GitBranch, Shield, Zap } from "lucide-react"
 
 const capabilities = [
@@ -6,7 +5,7 @@ const capabilities = [
     icon: Code2,
     title: "Code-first Workflows",
     description:
-      "Write workflows in Kotlin with a simple WorkflowContext API. TypeScript and Python support planned. Event sourcing ensures deterministic replay.",
+      "Write workflows in Python, TypeScript, Kotlin, or Rust with a simple WorkflowContext API. Event sourcing ensures deterministic replay.",
   },
   {
     icon: Workflow,
@@ -18,7 +17,7 @@ const capabilities = [
     icon: Cpu,
     title: "AI Agent Execution",
     description:
-      "Resume agent loops at any point without losing state. Time-travel debugging lets you replay executions with different inputs.",
+      "Resume agent loops at any point without losing state. Stream LLM tokens in real-time. Time-travel debugging lets you replay executions.",
   },
   {
     icon: GitBranch,
@@ -42,7 +41,7 @@ const capabilities = [
 
 export function Capabilities() {
   return (
-    <section id="capabilities" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="capabilities" className="py-24 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold">Core Capabilities</h2>
@@ -53,11 +52,13 @@ export function Capabilities() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {capabilities.map((capability, i) => (
-            <Card key={i} className="p-6 bg-card hover:bg-card/80 transition-colors border-border">
-              <capability.icon className="h-10 w-10 text-accent mb-4" />
+            <div key={i} className="feature-card">
+              <div className="feature-card-icon">
+                <capability.icon className="h-5 w-5" />
+              </div>
               <h3 className="text-xl font-semibold mb-2">{capability.title}</h3>
               <p className="text-muted-foreground leading-relaxed">{capability.description}</p>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

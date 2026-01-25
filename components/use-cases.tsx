@@ -1,6 +1,3 @@
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-
 const useCases = [
   {
     category: "E-commerce",
@@ -21,7 +18,7 @@ const useCases = [
     title: "Multi-step Research Agents",
     description:
       "Agent loops that search web, analyze results, decide next steps, and compile reports. If the agent crashes mid-research, Flovyn resumes exactly where it left off without losing context.",
-    tags: ["AI Execution", "State Persistence", "Time-travel Debug"],
+    tags: ["AI Execution", "State Persistence", "Token Streaming"],
   },
   {
     category: "Integration",
@@ -48,7 +45,7 @@ const useCases = [
 
 export function UseCases() {
   return (
-    <section id="use-cases" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/20">
+    <section id="use-cases" className="py-24 px-4 sm:px-6 lg:px-8 bg-secondary/30">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold">What You Can Build</h2>
@@ -59,11 +56,11 @@ export function UseCases() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {useCases.map((useCase, i) => (
-            <Card key={i} className="p-6 bg-card border-border">
+            <div key={i} className="feature-card">
               <div className="flex items-center gap-3 mb-3">
-                <Badge variant="secondary" className="text-xs">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
                   {useCase.category}
-                </Badge>
+                </span>
               </div>
               <h3 className="text-xl font-semibold mb-3">{useCase.title}</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">{useCase.description}</p>
@@ -71,13 +68,13 @@ export function UseCases() {
                 {useCase.tags.map((tag, j) => (
                   <span
                     key={j}
-                    className="text-xs px-2 py-1 rounded-md bg-accent/10 text-accent-foreground border border-accent/20"
+                    className="text-xs px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { Github, Twitter } from "lucide-react"
+import { FlovynLogoIcon } from "./flovyn-logo"
 
 export function Footer() {
   return (
@@ -6,8 +7,8 @@ export function Footer() {
       <div className="container mx-auto max-w-6xl">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-6 w-6 rounded-md bg-accent" />
+            <div className="flex items-center gap-2.5 mb-4">
+              <FlovynLogoIcon size="sm" />
               <span className="font-semibold">Flovyn</span>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -71,17 +72,18 @@ export function Footer() {
                 href="https://github.com/flovyn/flovyn-server"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Github className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
             </div>
           </div>
         </div>
-        <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
+        <div className="section-divider mb-8" />
+        <div className="text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} Flovyn. Self-hosted first.</p>
         </div>
       </div>

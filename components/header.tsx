@@ -1,15 +1,16 @@
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { BookOpen, Github, ChevronDown } from "lucide-react"
+import { FlovynLogoIcon } from "./flovyn-logo"
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <a href="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-md bg-accent" />
+            <a href="/" className="flex items-center gap-2.5">
+              <FlovynLogoIcon size="md" />
               <span className="text-xl font-semibold">Flovyn</span>
             </a>
             <nav className="hidden items-center gap-6 md:flex">
@@ -49,7 +50,7 @@ export function Header() {
                 GitHub
               </a>
             </Button>
-            <Button size="sm">
+            <Button size="sm" className="bg-primary hover:bg-primary/90">
               <BookOpen className="h-4 w-4 mr-2" />
               Get Started
             </Button>

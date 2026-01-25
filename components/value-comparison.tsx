@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card"
 import { X, Check } from "lucide-react"
 
 const comparisons = [
@@ -8,11 +7,11 @@ const comparisons = [
   },
   {
     without: "Database polling for timeouts",
-    with: "ctx.sleep(Duration.ofDays(7))",
+    with: "ctx.sleep(Duration.hours(1))",
   },
   {
     without: "Custom state serialization",
-    with: "ctx.set('key', value) / ctx.get('key')",
+    with: "ctx.setState('key', value)",
   },
   {
     without: "Distributed transaction coordination",
@@ -26,7 +25,7 @@ const comparisons = [
 
 export function ValueComparison() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8">
+    <section className="py-24 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-5xl">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold">Why Flovyn?</h2>
@@ -35,36 +34,40 @@ export function ValueComparison() {
           </p>
         </div>
 
-        <Card className="overflow-hidden border-border">
+        <div className="feature-card overflow-hidden p-0">
           <div className="grid md:grid-cols-2">
-            <div className="bg-muted/40 p-6 border-b md:border-b-0 md:border-r border-border">
+            <div className="bg-destructive/5 p-6 border-b md:border-b-0 md:border-r border-border">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                <X className="h-5 w-5 text-red-500" />
+                <div className="h-8 w-8 rounded-full bg-destructive/10 flex items-center justify-center">
+                  <X className="h-4 w-4 text-destructive" />
+                </div>
                 Without Flovyn
               </h3>
               <ul className="space-y-4">
                 {comparisons.map((item, i) => (
-                  <li key={i} className="text-sm text-muted-foreground leading-relaxed">
+                  <li key={i} className="text-sm text-muted-foreground leading-relaxed pl-10">
                     {item.without}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="bg-card p-6">
+            <div className="bg-success/5 p-6">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                <Check className="h-5 w-5 text-green-500" />
+                <div className="h-8 w-8 rounded-full bg-success/10 flex items-center justify-center">
+                  <Check className="h-4 w-4 text-success" />
+                </div>
                 With Flovyn
               </h3>
               <ul className="space-y-4">
                 {comparisons.map((item, i) => (
-                  <li key={i} className="text-sm font-mono text-foreground leading-relaxed">
+                  <li key={i} className="text-sm font-mono text-foreground leading-relaxed pl-10">
                     {item.with}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
     </section>
   )
