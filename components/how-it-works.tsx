@@ -20,15 +20,15 @@ const steps: Step[] = [
       {
         language: "python",
         label: "Python",
-        code: `@task(name="send-email", timeout=timedelta(seconds=60))
+        code: `@task(name="send-email")
 class SendEmailTask:
     async def run(self, ctx: TaskContext, input: EmailInput) -> EmailResult:
-        await ctx.report_progress(0.1, "Connecting to SMTP...")
-        await ctx.report_progress(0.5, "Sending email...")
+        ctx.report_progress(0.1, "Connecting to SMTP...")
+        ctx.report_progress(0.5, "Sending email...")
 
         message_id = await email_service.send(input)
 
-        await ctx.report_progress(1.0, "Email sent")
+        ctx.report_progress(1.0, "Email sent")
         return EmailResult(message_id=message_id, status="sent")`,
       },
       {
@@ -36,15 +36,14 @@ class SendEmailTask:
         label: "TypeScript",
         code: `const sendEmailTask = task<EmailInput, EmailResult>({
   name: "send-email",
-  timeout: Duration.seconds(60),
 
   async run(ctx, input) {
-    await ctx.reportProgress(0.1, "Connecting to SMTP...");
-    await ctx.reportProgress(0.5, "Sending email...");
+    ctx.reportProgress(0.1, "Connecting to SMTP...");
+    ctx.reportProgress(0.5, "Sending email...");
 
     const messageId = await emailService.send(input);
 
-    await ctx.reportProgress(1.0, "Email sent");
+    ctx.reportProgress(1.0, "Email sent");
     return { messageId, status: "sent" };
   },
 });`,
@@ -54,9 +53,8 @@ class SendEmailTask:
         label: "Kotlin",
         code: `class SendEmailTask : TaskDefinition<EmailInput, EmailResult>() {
     override val kind = "send-email"
-    override val timeoutSeconds = 60
 
-    override suspend fun execute(input: EmailInput, ctx: TaskContext): EmailResult {
+    override suspend fun execute(ctx: TaskContext, input: EmailInput): EmailResult {
         ctx.reportProgress(0.1, "Connecting to SMTP...")
         ctx.reportProgress(0.5, "Sending email...")
 
@@ -78,15 +76,14 @@ impl TaskDefinition for SendEmailTask {
     type Output = EmailResult;
 
     fn kind(&self) -> &str { "send-email" }
-    fn timeout_seconds(&self) -> Option<u32> { Some(60) }
 
-    async fn execute(&self, input: Self::Input, ctx: &dyn TaskContext) -> Result<Self::Output> {
-        ctx.report_progress(0.1, Some("Connecting to SMTP...")).await?;
-        ctx.report_progress(0.5, Some("Sending email...")).await?;
+    async fn execute(&self, ctx: &dyn TaskContext, input: Self::Input) -> Result<Self::Output> {
+        ctx.report_progress(0.1, Some("Connecting to SMTP..."))?;
+        ctx.report_progress(0.5, Some("Sending email..."))?;
 
         let message_id = email_service.send(&input).await?;
 
-        ctx.report_progress(1.0, Some("Email sent")).await?;
+        ctx.report_progress(1.0, Some("Email sent"))?;
         Ok(EmailResult { message_id, status: "sent".into() })
     }
 }`,
@@ -105,15 +102,15 @@ class OnboardingWorkflow:
     async def run(self, ctx: WorkflowContext, input: UserInput) -> OnboardingResult:
         user = await ctx.run("create-user", lambda: user_service.create(input))
 
-        # Run email and setup in parallel
-        email_result, setup_result = await asyncio.gather(
-            ctx.execute_task(SendEmailTask, EmailInput(
-                to=input.email, subject="Welcome!", body="..."
-            )),
-            ctx.execute_task(SetupAccountTask, SetupInput(user_id=user.id)),
-        )
+        # Run email and setup in parallel (schedule_task returns handles)
+        email_handle = ctx.schedule_task("send-email", {
+            "to": input.email, "subject": "Welcome!", "body": "..."
+        })
+        setup_handle = ctx.schedule_task("setup-account", {"user_id": user["id"]})
+        email_result = await email_handle.result()
+        setup_result = await setup_handle.result()
 
-        return OnboardingResult(user_id=user.id, status="completed")`,
+        return OnboardingResult(user_id=user["id"], status="completed")`,
       },
       {
         language: "typescript",
@@ -124,12 +121,14 @@ class OnboardingWorkflow:
   async run(ctx, input) {
     const user = await ctx.run("create-user", () => userService.create(input));
 
-    // Run email and setup in parallel
+    // Run email and setup in parallel (scheduleTask returns handles)
+    const emailHandle = ctx.scheduleTask(sendEmailTask, {
+      to: input.email, subject: "Welcome!", body: "..."
+    });
+    const setupHandle = ctx.scheduleTask(setupAccountTask, { userId: user.id });
     const [emailResult, setupResult] = await Promise.all([
-      ctx.task(sendEmailTask, {
-        to: input.email, subject: "Welcome!", body: "..."
-      }),
-      ctx.task(setupAccountTask, { userId: user.id }),
+      emailHandle.result(),
+      setupHandle.result(),
     ]);
 
     return { userId: user.id, status: "completed" };
@@ -145,12 +144,16 @@ class OnboardingWorkflow:
     override suspend fun execute(ctx: WorkflowContext, input: UserInput): OnboardingResult {
         val user = ctx.run("create-user") { userService.create(input) }
 
-        // Run email and setup in parallel
+        // Run email and setup in parallel (scheduleAsync returns deferred)
         val (emailResult, setupResult) = awaitAll(
-            ctx.scheduleAsync<EmailResult>("send-email",
-                EmailInput(input.email, "Welcome!", "...")),
-            ctx.scheduleAsync<SetupResult>("setup-account",
-                SetupInput(user.id)),
+            ctx.scheduleAsync<EmailResult>(
+                kind = "send-email",
+                input = EmailInput(input.email, "Welcome!", "...")
+            ),
+            ctx.scheduleAsync<SetupResult>(
+                kind = "setup-account",
+                input = SetupInput(user.id)
+            ),
         )
 
         return OnboardingResult(user.id, "completed")
@@ -170,12 +173,15 @@ impl WorkflowDefinition for OnboardingWorkflow {
     fn kind(&self) -> &str { "user-onboarding" }
 
     async fn execute(&self, ctx: &dyn WorkflowContext, input: Self::Input) -> Result<Self::Output> {
-        let user = ctx.run("create-user", || user_service.create(&input)).await?;
+        let user_data = serde_json::to_value(&input)?;
+        let user: User = serde_json::from_value(ctx.run_raw("create-user", user_data).await?)?;
 
-        // Run email and setup in parallel
+        // Run email and setup in parallel (schedule_raw with JSON)
+        let email_input = serde_json::to_value(&EmailInput::new(&input.email, "Welcome!", "..."))?;
+        let setup_input = serde_json::to_value(&SetupInput::new(&user.id))?;
         let (email_result, setup_result) = tokio::try_join!(
-            ctx.schedule(SendEmailTask, &EmailInput::new(&input.email, "Welcome!", "...")),
-            ctx.schedule(SetupAccountTask, &SetupInput::new(&user.id)),
+            ctx.schedule_raw("send-email", email_input),
+            ctx.schedule_raw("setup-account", setup_input),
         )?;
 
         Ok(OnboardingResult { user_id: user.id, status: "completed".into() })
@@ -192,14 +198,15 @@ impl WorkflowDefinition for OnboardingWorkflow {
         language: "python",
         label: "Python",
         code: `async def main():
-    client = (FlovynClientBuilder()
-        .server_address("localhost:9090")
-        .org_id(my_org_id)
-        .queue("onboarding-workers")
-        .register_workflow(OnboardingWorkflow)
-        .register_task(SendEmailTask)
-        .register_task(SetupAccountTask)
-        .build())
+    client = FlovynClient(
+        server_url="localhost:9090",
+        org_id=my_org_id,
+        queue="onboarding-workers",
+    )
+
+    client.register_workflow(OnboardingWorkflow)
+    client.register_task(SendEmailTask)
+    client.register_task(SetupAccountTask)
 
     async with client:
         await client.run()  # Blocks and polls for work`,
@@ -222,8 +229,8 @@ await client.start(); // Blocks and polls for work`,
       {
         language: "kotlin",
         label: "Kotlin",
-        code: `fun main() {
-    val client = FlovynClient.builder()
+        code: `fun main() = runBlocking {
+    val client = FlovynClientBuilder()
         .serverAddress("localhost", 9090)
         .orgId(myOrgId)
         .queue("onboarding-workers")
@@ -242,7 +249,7 @@ await client.start(); // Blocks and polls for work`,
 async fn main() -> Result<()> {
     let client = FlovynClient::builder()
         .server_url("localhost:9090")
-        .org_id(my_org_id)
+        .org_id(&my_org_id)
         .queue("onboarding-workers")
         .register_workflow(OnboardingWorkflow)
         .register_task(SendEmailTask)
@@ -250,7 +257,7 @@ async fn main() -> Result<()> {
         .build()
         .await?;
 
-    client.start_worker().await // Blocks and polls for work
+    client.run().await // Blocks and polls for work
 }`,
       },
     ],

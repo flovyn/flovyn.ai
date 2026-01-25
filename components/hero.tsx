@@ -9,17 +9,19 @@ const workflowExamples = [
     language: "python" as const,
     label: "Python",
     filename: "order_workflow.py",
-    code: `@workflow(name="order-processing", cancellable=True)
+    code: `@workflow(name="order-processing")
 class OrderWorkflow:
     async def run(self, ctx: WorkflowContext, input: OrderInput) -> OrderOutput:
-        # Schedule payment task
-        payment = await ctx.execute_task(PaymentTask, input.payment_details)
-        await ctx.check_cancellation()
+        # Schedule payment task (string-based task reference)
+        payment = await ctx.execute_task("payment-task", {
+            "amount": input.amount,
+            "currency": input.currency
+        })
 
         # Schedule inventory task
-        inventory = await ctx.execute_task(InventoryTask, input.items)
-        if inventory.out_of_stock:
-            await ctx.run("refund", lambda: refund_payment(payment.transaction_id))
+        inventory = await ctx.execute_task("inventory-task", {"items": input.items})
+        if inventory["out_of_stock"]:
+            await ctx.run("refund", lambda: refund_payment(payment["transaction_id"]))
             raise NonRetryableError("Inventory unavailable")
 
         return OrderOutput(order_id=input.order_id, status="completed")`,
@@ -30,15 +32,16 @@ class OrderWorkflow:
     filename: "orderWorkflow.ts",
     code: `const orderWorkflow = workflow<OrderInput, OrderOutput>({
   name: "order-processing",
-  cancellable: true,
 
   async run(ctx, input) {
-    // Schedule payment task
-    const payment = await ctx.task(paymentTask, input.paymentDetails);
-    ctx.checkCancellation();
+    // Schedule payment task (typed task reference)
+    const payment = await ctx.task(paymentTask, {
+      amount: input.amount,
+      currency: input.currency,
+    });
 
     // Schedule inventory task
-    const inventory = await ctx.task(inventoryTask, input.items);
+    const inventory = await ctx.task(inventoryTask, { items: input.items });
     if (inventory.outOfStock) {
       await ctx.run("refund", () => refundPayment(payment.transactionId));
       throw new NonRetryableError("Inventory unavailable");
@@ -54,15 +57,19 @@ class OrderWorkflow:
     filename: "OrderWorkflow.kt",
     code: `class OrderWorkflow : WorkflowDefinition<OrderInput, OrderOutput>() {
     override val kind = "order-processing"
-    override val cancellable = true
 
     override suspend fun execute(ctx: WorkflowContext, input: OrderInput): OrderOutput {
-        // Schedule payment task
-        val payment = ctx.schedule<PaymentResult>("payment-task", input.paymentDetails)
-        ctx.checkCancellation()
+        // Schedule payment task (string-based task kind)
+        val payment = ctx.schedule<PaymentResult>(
+            kind = "payment-task",
+            input = PaymentInput(input.amount, input.currency)
+        )
 
         // Schedule inventory task
-        val inventory = ctx.schedule<InventoryResult>("inventory-task", input.items)
+        val inventory = ctx.schedule<InventoryResult>(
+            kind = "inventory-task",
+            input = InventoryInput(input.items)
+        )
         if (inventory.outOfStock) {
             ctx.run("refund") { refundPayment(payment.transactionId) }
             throw NonRetryableException("Inventory unavailable")
@@ -84,17 +91,21 @@ impl WorkflowDefinition for OrderWorkflow {
     type Output = OrderOutput;
 
     fn kind(&self) -> &str { "order-processing" }
-    fn cancellable(&self) -> bool { true }
 
     async fn execute(&self, ctx: &dyn WorkflowContext, input: Self::Input) -> Result<Self::Output> {
-        // Schedule payment task
-        let payment: PaymentResult = ctx.schedule(PaymentTask, &input.payment_details).await?;
-        ctx.check_cancellation().await?;
+        // Schedule payment task (JSON-based with string kind)
+        let payment_input = serde_json::to_value(&PaymentInput::from(&input))?;
+        let payment_result = ctx.schedule_raw("payment-task", payment_input).await?;
+        let payment: PaymentResult = serde_json::from_value(payment_result)?;
 
         // Schedule inventory task
-        let inventory: InventoryResult = ctx.schedule(InventoryTask, &input.items).await?;
+        let inventory_input = serde_json::to_value(&input.items)?;
+        let inventory_result = ctx.schedule_raw("inventory-task", inventory_input).await?;
+        let inventory: InventoryResult = serde_json::from_value(inventory_result)?;
+
         if inventory.out_of_stock {
-            ctx.run("refund", || refund_payment(&payment.transaction_id)).await?;
+            let refund = serde_json::to_value(&payment.transaction_id)?;
+            ctx.run_raw("refund", refund).await?;
             return Err(NonRetryableError::new("Inventory unavailable"));
         }
 

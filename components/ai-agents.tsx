@@ -14,19 +14,16 @@ class ResearchAgent:
         results = []
 
         while len(results) < 10:
-            # Each search is a durable task
-            search = await ctx.execute_task(WebSearchTask, query.text)
+            # Each search is a durable task (string-based reference)
+            search = await ctx.execute_task("web-search", {"query": query.text})
             results.append(search)
 
             # LLM decision - streams tokens in real-time
-            decision = await ctx.execute_task(LLMDecideTask, results)
-            if decision.complete:
+            decision = await ctx.execute_task("llm-decide", {"results": results})
+            if decision["complete"]:
                 break
 
-            # Resume point on crash
-            await ctx.check_cancellation()
-
-        return await ctx.execute_task(CompileReportTask, results)`,
+        return await ctx.execute_task("compile-report", {"results": results})`,
   },
   {
     language: "typescript" as const,
@@ -39,19 +36,16 @@ class ResearchAgent:
     const results: SearchResult[] = [];
 
     while (results.length < 10) {
-      // Each search is a durable task
-      const search = await ctx.task(webSearchTask, query.text);
+      // Each search is a durable task (typed reference)
+      const search = await ctx.task(webSearchTask, { query: query.text });
       results.push(search);
 
       // LLM decision - streams tokens in real-time
-      const decision = await ctx.task(llmDecideTask, results);
+      const decision = await ctx.task(llmDecideTask, { results });
       if (decision.complete) break;
-
-      // Resume point on crash
-      ctx.checkCancellation();
     }
 
-    return ctx.task(compileReportTask, results);
+    return ctx.task(compileReportTask, { results });
   },
 });`,
   },
@@ -66,19 +60,22 @@ class ResearchAgent:
         val results = mutableListOf<SearchResult>()
 
         while (results.size < 10) {
-            // Each search is a durable task
-            val search = ctx.schedule<SearchResult>("web-search", input.query)
+            // Each search is a durable task (string-based kind)
+            val search = ctx.schedule<SearchResult>(
+                kind = "web-search",
+                input = SearchInput(input.query)
+            )
             results.add(search)
 
             // LLM decision - streams tokens in real-time
-            val decision = ctx.schedule<AgentDecision>("llm-decide", results)
+            val decision = ctx.schedule<AgentDecision>(
+                kind = "llm-decide",
+                input = DecideInput(results)
+            )
             if (decision.complete) break
-
-            // Resume point on crash
-            ctx.checkCancellation()
         }
 
-        return ctx.schedule("compile-report", results)
+        return ctx.schedule(kind = "compile-report", input = ReportInput(results))
     }
 }`,
   },
@@ -96,22 +93,24 @@ impl WorkflowDefinition for ResearchAgent {
     fn kind(&self) -> &str { "research-agent" }
 
     async fn execute(&self, ctx: &dyn WorkflowContext, input: Self::Input) -> Result<Self::Output> {
-        let mut results = Vec::new();
+        let mut results: Vec<SearchResult> = Vec::new();
 
         while results.len() < 10 {
-            // Each search is a durable task
-            let search: SearchResult = ctx.schedule(WebSearchTask, &input.query).await?;
-            results.push(search);
+            // Each search is a durable task (JSON-based)
+            let search_input = serde_json::to_value(&SearchInput::new(&input.query))?;
+            let search_result = ctx.schedule_raw("web-search", search_input).await?;
+            results.push(serde_json::from_value(search_result)?);
 
             // LLM decision - streams tokens in real-time
-            let decision: AgentDecision = ctx.schedule(LLMDecideTask, &results).await?;
+            let decide_input = serde_json::to_value(&results)?;
+            let decision: AgentDecision = serde_json::from_value(
+                ctx.schedule_raw("llm-decide", decide_input).await?
+            )?;
             if decision.complete { break; }
-
-            // Resume point on crash
-            ctx.check_cancellation().await?;
         }
 
-        ctx.schedule(CompileReportTask, &results).await
+        let report_input = serde_json::to_value(&results)?;
+        Ok(serde_json::from_value(ctx.schedule_raw("compile-report", report_input).await?)?)
     }
 }`,
   },

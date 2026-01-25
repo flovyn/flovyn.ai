@@ -23,14 +23,14 @@ const apiExamples: APIExample[] = [
         code: `# Side effects - cached on replay
 result = await ctx.run("fetch-data", lambda: http_client.get(url))
 
-# Long-running tasks - delegated with retries
-payment = await ctx.execute_task(PaymentTask, input)
+# Long-running tasks - string-based task reference
+payment = await ctx.execute_task("payment-task", {"amount": 100})
 
-# Parallel execution
-results = await asyncio.gather(
-    ctx.execute_task(TaskA, input_a),
-    ctx.execute_task(TaskB, input_b),
-)`,
+# Parallel execution with schedule_task
+handle_a = ctx.schedule_task("task-a", input_a)
+handle_b = ctx.schedule_task("task-b", input_b)
+result_a = await handle_a.result()
+result_b = await handle_b.result()`,
       },
       {
         language: "typescript",
@@ -38,13 +38,15 @@ results = await asyncio.gather(
         code: `// Side effects - cached on replay
 const result = await ctx.run("fetch-data", () => httpClient.get(url));
 
-// Long-running tasks - delegated with retries
-const payment = await ctx.task(paymentTask, input);
+// Long-running tasks - typed task reference
+const payment = await ctx.task(paymentTask, { amount: 100 });
 
-// Parallel execution
+// Parallel execution with scheduleTask
+const handleA = ctx.scheduleTask(taskA, inputA);
+const handleB = ctx.scheduleTask(taskB, inputB);
 const [resultA, resultB] = await Promise.all([
-  ctx.task(taskA, inputA),
-  ctx.task(taskB, inputB),
+  handleA.result(),
+  handleB.result(),
 ]);`,
       },
       {
@@ -53,28 +55,33 @@ const [resultA, resultB] = await Promise.all([
         code: `// Side effects - cached on replay
 val result = ctx.run("fetch-data") { httpClient.get(url) }
 
-// Long-running tasks - delegated with retries
-val payment = ctx.schedule<PaymentResponse>("payment-task", input)
+// Long-running tasks - string-based task kind
+val payment = ctx.schedule<PaymentResponse>(
+    kind = "payment-task",
+    input = PaymentInput(amount = 100)
+)
 
-// Parallel execution
+// Parallel execution with scheduleAsync
 val (resultA, resultB) = awaitAll(
-    ctx.scheduleAsync<ResultA>("task-a", inputA),
-    ctx.scheduleAsync<ResultB>("task-b", inputB),
+    ctx.scheduleAsync<ResultA>(kind = "task-a", input = inputA),
+    ctx.scheduleAsync<ResultB>(kind = "task-b", input = inputB),
 )`,
       },
       {
         language: "rust",
         label: "Rust",
-        code: `// Side effects - cached on replay
-let result = ctx.run("fetch-data", || http_client.get(&url)).await?;
+        code: `// Side effects - run_raw with pre-computed value
+let fetch_result = http_client.get(&url).await?;
+let result = ctx.run_raw("fetch-data", serde_json::to_value(&fetch_result)?).await?;
 
-// Long-running tasks - delegated with retries
-let payment: PaymentResponse = ctx.schedule(PaymentTask, &input).await?;
+// Long-running tasks - schedule_raw with JSON
+let input = serde_json::to_value(&PaymentInput { amount: 100 })?;
+let payment: Value = ctx.schedule_raw("payment-task", input).await?;
 
 // Parallel execution
 let (result_a, result_b) = tokio::try_join!(
-    ctx.schedule(TaskA, &input_a),
-    ctx.schedule(TaskB, &input_b),
+    ctx.schedule_raw("task-a", serde_json::to_value(&input_a)?),
+    ctx.schedule_raw("task-b", serde_json::to_value(&input_b)?),
 )?;`,
       },
     ],
@@ -126,7 +133,7 @@ let delay = ctx.random().gen_range(1000..5000);`,
         label: "Python",
         code: `# Persisted across restarts
 await ctx.set_state("status", "processing")
-status = await ctx.get_state("status")
+status = await ctx.get_state("status", type_hint=str)
 
 # Clear state when done
 await ctx.clear_state("status")`,
@@ -134,12 +141,12 @@ await ctx.clear_state("status")`,
       {
         language: "typescript",
         label: "TypeScript",
-        code: `// Persisted across restarts
-await ctx.setState("status", "processing");
-const status = await ctx.getState<string>("status");
+        code: `// Persisted across restarts (synchronous API)
+ctx.setState("status", "processing");
+const status = ctx.getState<string>("status");
 
 // Clear state when done
-await ctx.clearState("status");`,
+ctx.clearState("status");`,
       },
       {
         language: "kotlin",
@@ -154,12 +161,12 @@ ctx.clear("status")`,
       {
         language: "rust",
         label: "Rust",
-        code: `// Persisted across restarts
-ctx.set_state("status", "processing").await?;
-let status: Option<String> = ctx.get_state("status").await?;
+        code: `// Persisted across restarts (JSON-based)
+ctx.set_raw("status", serde_json::to_value("processing")?).await?;
+let status: Value = ctx.get_raw("status").await?.unwrap_or_default();
 
 // Clear state when done
-ctx.delete_state("status").await?;`,
+ctx.delete_raw("status").await?;`,
       },
     ],
   },
@@ -174,7 +181,7 @@ ctx.delete_state("status").await?;`,
 await ctx.sleep(timedelta(hours=1))
 
 # Wait for external signal with timeout
-approval = await ctx.wait_for_promise(
+approval = await ctx.promise(
     "manager-approval",
     timeout=timedelta(days=7)
 )`,
@@ -186,10 +193,9 @@ approval = await ctx.wait_for_promise(
 await ctx.sleep(Duration.hours(1));
 
 // Wait for external signal with timeout
-const approval = await ctx.promise<ApprovalResult>(
-  "manager-approval",
-  Duration.days(7)
-);`,
+const approval = await ctx.promise<ApprovalResult>("manager-approval", {
+  timeout: Duration.days(7),
+});`,
       },
       {
         language: "kotlin",
@@ -210,7 +216,7 @@ val approval = ctx.promise<ApprovalResult>(
 ctx.sleep(Duration::from_secs(3600)).await?;
 
 // Wait for external signal with timeout
-let approval: ApprovalResult = ctx.promise("manager-approval")
+let approval: Value = ctx.promise_raw("manager-approval")
     .with_timeout(Duration::from_secs(7 * 24 * 3600))
     .await?;`,
       },
@@ -229,11 +235,11 @@ class LLMGenerateTask:
         response = ""
         async for token in llm.stream(prompt):
             response += token
-            # Stream tokens in real-time
-            await ctx.stream_token(token)
+            # Stream tokens in real-time (sync call)
+            ctx.stream_token(token)
 
         # Report final progress
-        await ctx.stream_progress(1.0, "Generation complete")
+        ctx.stream_progress(1.0, "Generation complete")
         return response`,
       },
       {
@@ -246,12 +252,12 @@ class LLMGenerateTask:
     let response = "";
     for await (const token of llm.stream(prompt)) {
       response += token;
-      // Stream tokens in real-time
-      await ctx.streamToken(token);
+      // Stream tokens in real-time (sync call)
+      ctx.streamToken(token);
     }
 
     // Report final progress
-    await ctx.streamProgress(1.0, "Generation complete");
+    ctx.streamProgress(1.0, "Generation complete");
     return response;
   },
 });`,
@@ -262,7 +268,7 @@ class LLMGenerateTask:
         code: `class LLMGenerateTask : TaskDefinition<String, String>() {
     override val kind = "llm-generate"
 
-    override suspend fun execute(input: String, ctx: TaskContext): String {
+    override suspend fun execute(ctx: TaskContext, input: String): String {
         val response = StringBuilder()
         llm.stream(input).collect { token ->
             response.append(token)
@@ -288,18 +294,18 @@ impl TaskDefinition for LLMGenerateTask {
 
     fn kind(&self) -> &str { "llm-generate" }
 
-    async fn execute(&self, input: Self::Input, ctx: &dyn TaskContext) -> Result<Self::Output> {
+    async fn execute(&self, ctx: &dyn TaskContext, input: Self::Input) -> Result<Self::Output> {
         let mut response = String::new();
         let mut stream = llm.stream(&input).await?;
 
         while let Some(token) = stream.next().await {
             response.push_str(&token);
             // Stream tokens in real-time
-            ctx.stream_token(&token).await?;
+            ctx.stream_token(&token)?;
         }
 
         // Report final progress
-        ctx.stream_progress(1.0, Some("Generation complete")).await?;
+        ctx.stream_progress(1.0, Some("Generation complete"))?;
         Ok(response)
     }
 }`,
