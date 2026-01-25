@@ -11,24 +11,6 @@ export const metadata: Metadata = {
   title: "Flovyn - The Resilient Execution Platform",
   description:
     "Workflow orchestration built on event sourcing with deterministic replay. Code-first workflows, visual builder, and AI agent execution.",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
-  },
 }
 
 export default function RootLayout({
