@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Github } from "lucide-react"
 import { TabbedCodeBlock } from "./code-block"
 import { PythonIcon, TypeScriptIcon, KotlinIcon, RustIcon } from "./language-icons"
+import { EUFlag } from "./eu-flag"
 
 const workflowExamples = [
   {
@@ -122,8 +123,8 @@ export function Hero() {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm" style={{ backgroundColor: '#003399', color: '#FFCC00' }}>
-            <span>🇪🇺</span>
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-sm" style={{ backgroundColor: '#003399', color: '#FFCC00' }}>
+            <EUFlag className="h-5 w-7" />
             <span className="font-medium">European. Self-hosted. Runs on PostgreSQL.</span>
           </div>
 
