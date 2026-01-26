@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { BookOpen, Github, ChevronDown } from "lucide-react"
 import { FlovynLogoIcon } from "./flovyn-logo"
+import { LanguageSwitcher } from "./language-switcher"
 
 export function Header() {
   return (
@@ -43,7 +44,8 @@ export function Header() {
               </a>
             </nav>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             <Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
               <a href="https://github.com/flovyn/flovyn-server" target="_blank" rel="noopener noreferrer">
                 <Github className="h-4 w-4 mr-2" />

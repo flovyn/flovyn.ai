@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { LanguageProvider } from "@/components/language-context"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -10,7 +11,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Flovyn - The Resilient Execution Platform",
   description:
-    "Workflow orchestration built on event sourcing with deterministic replay. Code-first workflows, visual builder, and AI agent execution.",
+    "Workflow orchestration built on event sourcing with deterministic replay. Code-first workflows and AI agent execution.",
 }
 
 export default function RootLayout({
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`font-sans antialiased`}>
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
         <Analytics />
       </body>
     </html>

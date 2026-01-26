@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { createHighlighter } from "shiki"
+import { useLanguage, type SupportedLanguage } from "./language-context"
 
 // --- Singleton highlighter instance ---
 let highlighterPromise: Promise<import("shiki").Highlighter> | null = null
@@ -16,7 +17,8 @@ function getHighlighter() {
   return highlighterPromise
 }
 
-export type SupportedLanguage = "kotlin" | "python" | "rust" | "typescript"
+// Re-export SupportedLanguage from language-context for backwards compatibility
+export type { SupportedLanguage } from "./language-context"
 
 interface CodeBlockProps {
   code: string
@@ -92,7 +94,7 @@ export function CodeBlock({
   )
 }
 
-// Language tab selector component
+// Language tab selector component - now uses global language context
 interface LanguageTab {
   language: SupportedLanguage
   label: string
@@ -106,38 +108,16 @@ interface TabbedCodeBlockProps {
 }
 
 export function TabbedCodeBlock({ tabs, className = "" }: TabbedCodeBlockProps) {
-  const [activeTab, setActiveTab] = useState<SupportedLanguage>(tabs[0]?.language || "kotlin")
-  const activeTabData = tabs.find(t => t.language === activeTab) || tabs[0]
-
-  const languageIcons: Record<SupportedLanguage, string> = {
-    python: "🐍",
-    kotlin: "🟣",
-    rust: "🦀",
-    typescript: "💠",
-  }
+  const { language } = useLanguage()
+  // Find the tab for the current global language, or fall back to first tab
+  const activeTabData = tabs.find(t => t.language === language) || tabs[0]
 
   return (
-    <div className={`tabbed-code-block ${className}`}>
-      <div className="tab-header">
-        <div className="tab-list">
-          {tabs.map((tab) => (
-            <button
-              key={tab.language}
-              onClick={() => setActiveTab(tab.language)}
-              className={`tab-button ${activeTab === tab.language ? 'active' : ''}`}
-            >
-              <span className="tab-icon">{languageIcons[tab.language]}</span>
-              <span className="tab-label">{tab.label}</span>
-            </button>
-          ))}
-        </div>
-        {activeTabData.filename && (
-          <span className="tab-filename">{activeTabData.filename}</span>
-        )}
-      </div>
+    <div className={className}>
       <CodeBlock
         code={activeTabData.code}
-        language={activeTab}
+        language={activeTabData.language}
+        filename={activeTabData.filename}
       />
     </div>
   )
