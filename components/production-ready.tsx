@@ -1,4 +1,4 @@
-import { Server, Database, Lock, Flag } from "lucide-react"
+import { Server, Database, Lock } from "lucide-react"
 
 const features = [
   {
@@ -9,17 +9,12 @@ const features = [
   {
     icon: Database,
     title: "Data Retention",
-    description: "Automatic retention with configurable policies. Optional S3-compatible archival for long-term storage.",
+    description: "Configurable retention policies. Optional S3-compatible archival.",
   },
   {
     icon: Lock,
     title: "Multi-tenancy",
-    description: "Built-in tenant isolation with quota enforcement and rate limiting. Perfect for SaaS products.",
-  },
-  {
-    icon: Flag,
-    title: "European Sovereignty",
-    description: "Made in Europe. Self-hosted first with full data control. No US cloud dependencies required.",
+    description: "Tenant isolation with quota enforcement and rate limiting.",
   },
 ]
 
@@ -34,7 +29,7 @@ export function ProductionReady() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-3 gap-6">
           {features.map((feature, i) => (
             <div key={i} className="feature-card text-center">
               <div className="feature-card-icon mx-auto">

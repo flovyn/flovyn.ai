@@ -6,6 +6,7 @@ import { UseCases } from "@/components/use-cases"
 import { ValueComparison } from "@/components/value-comparison"
 import { HowItWorks } from "@/components/how-it-works"
 import { AIAgents } from "@/components/ai-agents"
+import { BuiltWithRust } from "@/components/built-with-rust"
 import { ProductionReady } from "@/components/production-ready"
 import { CTA } from "@/components/cta"
 import { Footer } from "@/components/footer"
@@ -21,6 +22,7 @@ export default function Home() {
       <ValueComparison />
       <HowItWorks />
       <AIAgents />
+      <BuiltWithRust />
       <ProductionReady />
       <CTA />
       <Footer />
