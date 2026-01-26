@@ -1,4 +1,4 @@
-import { Zap, Shield, Cpu } from "lucide-react"
+import { Zap, Shield, Cpu, Box } from "lucide-react"
 
 const benefits = [
   {
@@ -16,6 +16,11 @@ const benefits = [
     title: "Low Resource Usage",
     description: "Efficient memory footprint. Run thousands of workflows on modest hardware.",
   },
+  {
+    icon: Box,
+    title: "Single Binary Deploy",
+    description: "One executable + PostgreSQL. No JVM, no containers required, no runtime dependencies.",
+  },
 ]
 
 export function BuiltWithRust() {
@@ -31,11 +36,11 @@ export function BuiltWithRust() {
             Engineered for reliability
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            The Flovyn server is written in Rust for maximum performance and safety. No JVM, no interpreter, no surprises.
+            The Flovyn server is written in Rust. No JVM, no interpreter, no garbage collector surprises.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {benefits.map((benefit, i) => (
             <div key={i} className="feature-card text-center">
               <div className="feature-card-icon mx-auto !bg-orange-500/10 !text-orange-400">

@@ -1,25 +1,25 @@
-import { Flag, Server, Box, Database } from "lucide-react"
+import { Flag, Shield, Scale, Building2 } from "lucide-react"
 
 const benefits = [
   {
     icon: Flag,
-    title: "European Sovereignty",
-    description: "Designed and built in Europe. Your data stays under your control, on your infrastructure.",
+    title: "European Origin",
+    description: "Designed and built in Europe by a European team. Not a US company with an EU subsidiary.",
   },
   {
-    icon: Server,
-    title: "Self-Hosted First",
-    description: "No mandatory cloud dependencies. Run on your own servers in any EU data center.",
+    icon: Shield,
+    title: "Data Sovereignty",
+    description: "Your workflow data stays on your infrastructure. No data routing through US servers.",
   },
   {
-    icon: Box,
-    title: "Single Binary",
-    description: "One executable + PostgreSQL. No JVM, no containers required, no complex setup.",
+    icon: Scale,
+    title: "GDPR by Design",
+    description: "Built with European privacy regulations in mind. Full audit trails for compliance.",
   },
   {
-    icon: Database,
-    title: "Minimal Infrastructure",
-    description: "PostgreSQL is the only dependency. Start on a single server, scale as you grow.",
+    icon: Building2,
+    title: "No US Cloud Lock-in",
+    description: "Self-hosted on any infrastructure. No mandatory AWS, Azure, or GCP dependencies.",
   },
 ]
 
@@ -33,10 +33,10 @@ export function EuropeanSolution() {
             <span className="font-medium">Made in Europe</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold">
-            A European alternative
+            A European alternative to US workflow platforms
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Full data sovereignty with self-hosted infrastructure. No US cloud lock-in.
+            For organizations that need workflow orchestration without sending data to US clouds.
           </p>
         </div>
 
@@ -50,13 +50,6 @@ export function EuropeanSolution() {
               <p className="text-sm text-muted-foreground leading-relaxed">{benefit.description}</p>
             </div>
           ))}
-        </div>
-
-        <div className="mt-12 p-6 rounded-xl bg-blue-500/5 border border-blue-500/20 text-center">
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">GDPR-friendly by design.</span>{" "}
-            Unlike workflow platforms hosted exclusively on US clouds, Flovyn gives you full control over where your data lives.
-          </p>
         </div>
       </div>
     </section>

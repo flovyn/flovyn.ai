@@ -8,7 +8,6 @@ import { HowItWorks } from "@/components/how-it-works"
 import { AIAgents } from "@/components/ai-agents"
 import { BuiltWithRust } from "@/components/built-with-rust"
 import { EuropeanSolution } from "@/components/european-solution"
-import { ProductionReady } from "@/components/production-ready"
 import { CTA } from "@/components/cta"
 import { Footer } from "@/components/footer"
 
@@ -25,7 +24,6 @@ export default function Home() {
       <AIAgents />
       <BuiltWithRust />
       <EuropeanSolution />
-      <ProductionReady />
       <CTA />
       <Footer />
     </div>
