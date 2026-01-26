@@ -1,4 +1,4 @@
-import { Code2, Workflow, Cpu, GitBranch, Shield, Zap } from "lucide-react"
+import { Code2, Cpu, GitBranch, Shield, Zap } from "lucide-react"
 
 const capabilities = [
   {
@@ -6,12 +6,6 @@ const capabilities = [
     title: "Code-first Workflows",
     description:
       "Write workflows in Python, TypeScript, Kotlin, or Rust with a simple WorkflowContext API. Event sourcing ensures deterministic replay.",
-  },
-  {
-    icon: Workflow,
-    title: "Visual Builder",
-    description:
-      "Drag-and-drop interface powered by your custom workers. Write handlers in any language, register via gRPC, compose visually.",
   },
   {
     icon: Cpu,

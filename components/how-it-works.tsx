@@ -192,7 +192,7 @@ impl WorkflowDefinition for OnboardingWorkflow {
   },
   {
     title: "Register and Start",
-    description: "Register your workflows and tasks with the Flovyn client. They automatically appear in the visual builder.",
+    description: "Register your workflows and tasks with the Flovyn client. Start the worker to poll and execute jobs.",
     tabs: [
       {
         language: "python",

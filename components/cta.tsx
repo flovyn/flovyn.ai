@@ -14,7 +14,7 @@ export function CTA() {
               Build resilient workflows today
             </h2>
             <p className="text-lg text-muted-foreground mb-8 text-balance max-w-2xl mx-auto">
-              Start with code in Python, TypeScript, Kotlin, or Rust. Extend to visual workflows, run AI agents reliably in production.
+              Start with code in Python, TypeScript, Kotlin, or Rust. Run AI agents reliably in production.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">

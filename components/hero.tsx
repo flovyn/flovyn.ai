@@ -135,7 +135,7 @@ export function Hero() {
 
           {/* Subheadline */}
           <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed">
-            Workflow orchestration built on event sourcing. Start code-first, extend to visual workflows, run AI agents reliably.
+            Workflow orchestration built on event sourcing. Write code-first workflows and run AI agents reliably.
           </p>
 
           {/* SDK Badges */}

@@ -28,11 +28,6 @@ export function Footer() {
                   Use Cases
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Pricing
-                </a>
-              </li>
             </ul>
           </div>
           <div>
@@ -84,7 +79,7 @@ export function Footer() {
         </div>
         <div className="section-divider mb-8" />
         <div className="text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Flovyn. Self-hosted first.</p>
+          <p>&copy; {new Date().getFullYear()} Flovyn. Made in Europe. Self-hosted first.</p>
         </div>
       </div>
     </footer>
