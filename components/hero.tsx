@@ -122,7 +122,7 @@ export function Hero() {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-sm text-blue-400">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm" style={{ backgroundColor: '#003399', color: '#FFCC00' }}>
             <span>🇪🇺</span>
             <span className="font-medium">European. Self-hosted. Runs on PostgreSQL.</span>
           </div>

@@ -28,7 +28,7 @@ export function EuropeanSolution() {
     <section className="py-24 px-4 sm:px-6 lg:px-8 bg-secondary/30">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-sm text-blue-400">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm" style={{ backgroundColor: '#003399', color: '#FFCC00' }}>
             <span>🇪🇺</span>
             <span className="font-medium">Made in Europe</span>
           </div>

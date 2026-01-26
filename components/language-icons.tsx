@@ -2,6 +2,21 @@ interface IconProps {
   className?: string
 }
 
+export function EUFlagIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 810 540" xmlns="http://www.w3.org/2000/svg">
+      <rect fill="#039" width="810" height="540"/>
+      <g fill="#fc0" transform="translate(405,270)">
+        {[...Array(12)].map((_, i) => (
+          <g key={i} transform={`rotate(${i * 30})`}>
+            <path d="M 0,-160 L 9.27,-130.9 L 41.56,-130.9 L 15.14,-110.18 L 24.41,-81.07 L 0,-101.8 L -24.41,-81.07 L -15.14,-110.18 L -41.56,-130.9 L -9.27,-130.9 Z" />
+          </g>
+        ))}
+      </g>
+    </svg>
+  )
+}
+
 export function PythonIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 256 255" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid">
