@@ -28,14 +28,24 @@ export function Footer() {
                   Use Cases
                 </a>
               </li>
+              <li>
+                <a href="/ai-agents" className="hover:text-foreground transition-colors">
+                  AI Agents
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-3">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Documentation
+                <a href="/getting-started" className="hover:text-foreground transition-colors">
+                  Getting Started
+                </a>
+              </li>
+              <li>
+                <a href="/core" className="hover:text-foreground transition-colors">
+                  Core API
                 </a>
               </li>
               <li>
@@ -46,16 +56,6 @@ export function Footer() {
                   className="hover:text-foreground transition-colors"
                 >
                   Source Code
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Examples
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Community
                 </a>
               </li>
             </ul>
