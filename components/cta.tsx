@@ -11,10 +11,10 @@ export function CTA() {
 
           <div className="relative z-10">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-balance">
-              Build resilient workflows today
+              Stop building retry logic. Start building products.
             </h2>
             <p className="text-lg text-muted-foreground mb-8 text-balance max-w-2xl mx-auto">
-              Start with code in Python, TypeScript, Kotlin, or Rust. Run AI agents reliably in production.
+              Deploy on your infrastructure with PostgreSQL and NATS. European sovereignty. No US cloud dependency.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">

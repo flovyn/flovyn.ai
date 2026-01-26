@@ -1,8 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Github, Sparkles } from "lucide-react"
+import { ArrowRight, Github } from "lucide-react"
 import { TabbedCodeBlock } from "./code-block"
+import { PythonIcon, TypeScriptIcon, KotlinIcon, RustIcon } from "./language-icons"
 
 const workflowExamples = [
   {
@@ -121,36 +122,36 @@ export function Hero() {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-sm text-primary">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span className="font-medium">Event sourcing + deterministic replay</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-sm text-blue-400">
+            <span>🇪🇺</span>
+            <span className="font-medium">European. Self-hosted. Runs on PostgreSQL.</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance leading-[1.1]">
-            <span className="text-foreground">The </span>
-            <span className="gradient-text">resilient execution</span>
-            <span className="text-foreground"> platform</span>
+            <span className="text-foreground">What if your </span>
+            <span className="gradient-text">workflows never failed?</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed">
-            Workflow orchestration built on event sourcing. Write code-first workflows and run AI agents reliably.
+            Durable execution for code-first workflows and AI agents.
+            Runs on infrastructure you already know—PostgreSQL and NATS.
           </p>
 
           {/* SDK Badges */}
           <div className="flex items-center justify-center gap-3 pt-2">
             <span className="sdk-badge sdk-python">
-              <span>🐍</span> Python
+              <PythonIcon className="h-4 w-4" /> Python
             </span>
             <span className="sdk-badge sdk-typescript">
-              <span>💠</span> TypeScript
+              <TypeScriptIcon className="h-4 w-4" /> TypeScript
             </span>
             <span className="sdk-badge sdk-kotlin">
-              <span>🟣</span> Kotlin
+              <KotlinIcon className="h-4 w-4" /> Kotlin
             </span>
             <span className="sdk-badge sdk-rust">
-              <span>🦀</span> Rust
+              <RustIcon className="h-4 w-4" /> Rust
             </span>
           </div>
 

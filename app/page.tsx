@@ -3,9 +3,10 @@ import { Hero } from "@/components/hero"
 import { Capabilities } from "@/components/capabilities"
 import { UseCases } from "@/components/use-cases"
 import { ValueComparison } from "@/components/value-comparison"
-import { DetailTeasers } from "@/components/detail-teasers"
-import { BuiltWithRust } from "@/components/built-with-rust"
+import { StandardInfrastructure } from "@/components/standard-infrastructure"
 import { EuropeanSolution } from "@/components/european-solution"
+import { BuiltWithRust } from "@/components/built-with-rust"
+import { DetailTeasers } from "@/components/detail-teasers"
 import { CTA } from "@/components/cta"
 import { Footer } from "@/components/footer"
 
@@ -17,9 +18,10 @@ export default function Home() {
       <Capabilities />
       <UseCases />
       <ValueComparison />
-      <DetailTeasers />
-      <BuiltWithRust />
+      <StandardInfrastructure />
       <EuropeanSolution />
+      <BuiltWithRust />
+      <DetailTeasers />
       <CTA />
       <Footer />
     </div>
