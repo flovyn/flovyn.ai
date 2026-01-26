@@ -129,14 +129,14 @@ export function Hero() {
 
           {/* Headline */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance leading-[1.1]">
-            <span className="text-foreground">What if your </span>
-            <span className="gradient-text">workflows never failed?</span>
+            <span className="text-foreground">Your workflows. </span>
+            <span className="gradient-text">Your infrastructure.</span>
+            <span className="text-foreground"> Your data.</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed">
-            Durable execution for code-first workflows and AI agents.
-            Runs on infrastructure you already know—PostgreSQL and NATS.
+            Durable execution for workflows and AI agents. Self-hosted on PostgreSQL and NATS—no US cloud dependency.
           </p>
 
           {/* SDK Badges */}
