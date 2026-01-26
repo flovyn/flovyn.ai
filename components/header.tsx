@@ -28,13 +28,23 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   <DropdownMenuItem asChild>
-                    <a href="/vs-java" className="w-full cursor-pointer">
-                      vs Java Ecosystem
+                    <a href="/vs-temporal" className="w-full cursor-pointer">
+                      vs Temporal
+                    </a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <a href="/vs-restate" className="w-full cursor-pointer">
+                      vs Restate
                     </a>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <a href="/vs-celery" className="w-full cursor-pointer">
                       vs Celery
+                    </a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <a href="/vs-java" className="w-full cursor-pointer">
+                      vs Java Ecosystem
                     </a>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
