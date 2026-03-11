@@ -759,7 +759,6 @@ export default function IntroToLLMAgentsPresentation() {
                   {[
                     "Voice booking agent: clear value, measurable impact",
                     "Covers the full stack: audio, LLM, tool use, workflows",
-                    "Start with a scoped prototype (happy path only)",
                     "Learn about latency, cost, and error handling in practice",
                     "Use the experience to inform your broader AI roadmap",
                   ].map((item, i) => (
