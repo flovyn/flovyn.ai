@@ -173,7 +173,7 @@ export default function IntroToLLMAgentsPresentation() {
             <div style={{ textAlign: "center", paddingTop: 40 }}>
               <h1 style={{ fontSize: "2.6em", marginBottom: 16 }}>
                 Introduction to LLMs,<br />
-                <span className="accent-teal">Workflows</span> <span className="accent">&amp; AI Agents.</span>
+                <span style={{ color: THEME.accent }}>Workflows</span> <span style={{ color: THEME.rose }}>&amp; AI Agents.</span>
               </h1>
               <p style={{ fontSize: "1.4em", color: THEME.textMuted, marginTop: 24 }}>Manh-Ha Vu</p>
             </div>
@@ -392,7 +392,7 @@ export default function IntroToLLMAgentsPresentation() {
             <p className="slide-subtitle">{"From Anthropic's \"Building Effective Agents\" — Dec 2024"}</p>
             <div className="vs-table" style={{ marginTop: 20 }}>
               <div className="vs-col vs-col-left">
-                <h3 style={{ color: THEME.accent, fontSize: "1.1em" }}>
+                <h3 style={{ fontSize: "1.1em" }}>
                   <span className="badge badge-workflow">Workflow</span>
                 </h3>
                 <p style={{ fontSize: "0.85em", color: THEME.text, fontWeight: 600, marginBottom: 12 }}>
@@ -409,7 +409,7 @@ export default function IntroToLLMAgentsPresentation() {
                 ))}
               </div>
               <div className="vs-col vs-col-right">
-                <h3 style={{ color: THEME.rose, fontSize: "1.1em" }}>
+                <h3 style={{ fontSize: "1.1em" }}>
                   <span className="badge badge-agent">Agent</span>
                 </h3>
                 <p style={{ fontSize: "0.85em", color: THEME.text, fontWeight: 600, marginBottom: 12 }}>
@@ -482,7 +482,7 @@ export default function IntroToLLMAgentsPresentation() {
               </svg>
             </div>
             <div className="callout" style={{ textAlign: "center", marginTop: 24 }}>
-              Code steps in <strong className="accent-teal">teal</strong>, LLM steps in <strong className="accent">purple</strong>. The path is fully predefined — no LLM decides what happens next.
+              Code steps in <strong style={{ color: THEME.teal }}>teal</strong>, LLM steps in <strong style={{ color: THEME.primary }}>purple</strong>. The path is fully predefined — no LLM decides what happens next.
             </div>
           </section>
 
@@ -592,8 +592,8 @@ export default function IntroToLLMAgentsPresentation() {
               </table>
             </div>
             <div className="callout" style={{ textAlign: "center" }}>
-              <strong>Rule of thumb:</strong> if the task can be decomposed into predictable steps &rarr; <strong className="accent-teal">Workflow</strong>.
-              If it requires flexible, model-driven decision-making &rarr; <strong className="accent-rose">Agent</strong>. Always start with the simplest approach.
+              <strong>Rule of thumb:</strong> if the task can be decomposed into predictable steps &rarr; <strong style={{ color: THEME.accent }}>Workflow</strong>.
+              If it requires flexible, model-driven decision-making &rarr; <strong style={{ color: THEME.rose }}>Agent</strong>. Always start with the simplest approach.
             </div>
 
           </section>
