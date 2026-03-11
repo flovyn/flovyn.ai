@@ -16,7 +16,7 @@ const THEME = {
   teal: "#2dd4bf",
   tealDim: "rgba(45, 212, 191, 0.12)",
   amber: "#fbbf24",
-  rose: "#fb7185",
+  rose: "#4ade80",
   text: "#f1f0f5",
   textMuted: "#9ca3af",
   border: "#3d3558",
@@ -97,7 +97,7 @@ export default function IntroToLLMAgentsPresentation() {
 
         .badge { display: inline-block; font-size: 0.75em; font-weight: 600; padding: 4px 12px; border-radius: 6px; margin-right: 8px; }
         .badge-workflow { background: rgba(56, 189, 248, 0.15); color: ${THEME.accent}; }
-        .badge-agent { background: rgba(251, 113, 133, 0.15); color: ${THEME.rose}; }
+        .badge-agent { background: rgba(74, 222, 128, 0.15); color: ${THEME.rose}; }
         .badge-tbd { background: rgba(156, 163, 175, 0.15); color: ${THEME.textMuted}; border: 1px dashed ${THEME.textMuted}; }
 
         .step-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: ${THEME.primaryDim}; color: ${THEME.primaryLight}; font-weight: 700; font-size: 0.9em; margin-right: 14px; flex-shrink: 0; }
@@ -175,6 +175,7 @@ export default function IntroToLLMAgentsPresentation() {
                 Introduction to LLMs,<br />
                 <span className="accent-teal">Workflows</span> <span className="accent">&amp; AI Agents.</span>
               </h1>
+              <p style={{ fontSize: "1.4em", color: THEME.textMuted, marginTop: 24 }}>Manh-Ha Vu</p>
             </div>
           </section>
 
@@ -636,7 +637,7 @@ export default function IntroToLLMAgentsPresentation() {
                   ],
                 },
               ].map((col, i) => (
-                <div className="card" key={i} style={{ borderTopWidth: 2, borderTopColor: i === 0 ? THEME.amber : i === 1 ? THEME.rose : THEME.accent }}>
+                <div className="card" key={i} style={{ borderTopWidth: 2, borderTopColor: i === 0 ? THEME.amber : i === 1 ? "#f87171" : THEME.accent }}>
                   <div style={{ fontSize: "1.2em", marginBottom: 4 }} dangerouslySetInnerHTML={{ __html: col.icon }} />
                   <div className="card-header" style={{ fontSize: "0.85em" }}>{col.title}</div>
                   <ul style={{ paddingLeft: 16, margin: 0, listStyleType: "disc" }}>
@@ -682,7 +683,6 @@ export default function IntroToLLMAgentsPresentation() {
 
           {/* ===== SLIDE: SMARTER PRODUCTS — INTRO ===== */}
           <section>
-            <div className="slide-label">Part 03a &middot; Smarter Products</div>
             <h2 style={{ fontSize: "1.4em" }}>&#128640; Smarter Products</h2>
             <p className="slide-subtitle">Make your products more intelligent — directly improving productivity for your customers</p>
             <div className="card-grid card-grid-2" style={{ marginTop: 20 }}>
@@ -704,7 +704,6 @@ export default function IntroToLLMAgentsPresentation() {
 
           {/* ===== SLIDE: INTERNAL PROCESSES ===== */}
           <section>
-            <div className="slide-label">Part 03b &middot; Internal Processes</div>
             <h2 style={{ fontSize: "1.4em" }}>&#9881;&#65039; Internal Processes</h2>
             <p className="slide-subtitle">Automate and accelerate your own workflows — ship faster, reduce manual work</p>
             <div className="card-grid card-grid-2" style={{ marginTop: 20 }}>
