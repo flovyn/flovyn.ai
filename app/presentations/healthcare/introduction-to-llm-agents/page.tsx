@@ -443,9 +443,9 @@ export default function IntroToLLMAgentsPresentation() {
                 {/* Audio */}
                 <rect x="5" y="80" width="100" height="36" rx="6" fill={THEME.surface} stroke={THEME.teal} strokeWidth="1.5" />
                 <text x="55" y="103" textAnchor="middle" fontSize="14" fill={THEME.teal} fontFamily="Geist, system-ui, sans-serif">&#127908; Audio</text>
-                {/* Transcribe */}
-                <rect x="165" y="80" width="120" height="36" rx="6" fill={THEME.surface} stroke={THEME.teal} strokeWidth="1.5" />
-                <text x="225" y="103" textAnchor="middle" fontSize="14" fill={THEME.teal} fontFamily="Geist, system-ui, sans-serif">Transcribe</text>
+                {/* Transcribe (LLM step) */}
+                <rect x="155" y="80" width="150" height="36" rx="6" fill={THEME.surface} stroke={THEME.primary} strokeWidth="1.5" />
+                <text x="230" y="103" textAnchor="middle" fontSize="14" fill={THEME.primaryLight} fontFamily="Geist, system-ui, sans-serif">LLM: Transcribe</text>
                 {/* LLM: Note */}
                 <rect x="430" y="35" width="120" height="36" rx="6" fill={THEME.surface} stroke={THEME.primary} strokeWidth="1.5" />
                 <text x="490" y="58" textAnchor="middle" fontSize="14" fill={THEME.primaryLight} fontFamily="Geist, system-ui, sans-serif">LLM: Note</text>
@@ -461,9 +461,9 @@ export default function IntroToLLMAgentsPresentation() {
 
                 {/* ── Connecting lines (dashed) ── */}
                 {/* Audio → Transcribe */}
-                <line x1="105" y1="98" x2="165" y2="98" stroke={THEME.textMuted} strokeWidth="2" strokeDasharray="5 4" />
+                <line x1="105" y1="98" x2="155" y2="98" stroke={THEME.textMuted} strokeWidth="2" strokeDasharray="5 4" />
                 {/* Transcribe → fork dot */}
-                <line x1="285" y1="98" x2="380" y2="98" stroke={THEME.textMuted} strokeWidth="2" strokeDasharray="5 4" />
+                <line x1="305" y1="98" x2="380" y2="98" stroke={THEME.textMuted} strokeWidth="2" strokeDasharray="5 4" />
                 {/* Fork vertical lines */}
                 <line x1="390" y1="53" x2="390" y2="145" stroke={THEME.textMuted} strokeWidth="2" strokeDasharray="5 4" />
                 {/* Fork → LLM: Note */}
@@ -494,7 +494,7 @@ export default function IntroToLLMAgentsPresentation() {
             <div className="two-col" style={{ marginTop: 16 }}>
               <div>
                 {[
-                  { n: "1", title: "Transcribe consultation", desc: "Audio recording → speech-to-text transcription", llm: false },
+                  { n: "1", title: "Transcribe consultation", desc: "Audio recording → speech-to-text transcription", llm: true },
                   { n: "2", title: "Generate clinical note", desc: "LLM structures transcript into a clinical note", llm: true },
                   { n: "3", title: "Extract follow-up actions", desc: "LLM identifies prescriptions, lab orders, referrals, next appointment", llm: true },
                   { n: "4", title: "Update patient record", desc: "Write note + actions to patient record, attach to patient file", llm: false },
